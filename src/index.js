@@ -89,11 +89,15 @@ class MyArray {
     return arrFilter;
   }
 
-  forEach(callback) {
-    if (arguments.length > 0 && typeof callback === 'function') {
+  forEach(callback, thisArg) {
+    const self = thisArg ? thisArg : this;
+
+    if (typeof callback === 'function') {
       for (let i = 0; i < this.length; i++) {
-        this[i] = callback(this[i], i, this);
+        callback.call(self, this[i], i, this);
       }
+    } else {
+      throw new TypeError('callback is not a function');
     }
   }
   map(callback) {
