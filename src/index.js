@@ -76,15 +76,12 @@ class MyArray {
     return str;
   }
 
-  filter(callback) {
+  filter(callback, thisArg = this) {
     const arrFilter = new MyArray();
 
-    if (arguments.length > 0 && typeof callback === 'function') {
-      for (let i = 0; i < this.length; i++) {
-        if (callback(this[i], i, this)) {
-          arrFilter[i] = this[i];
-          arrFilter.length += 1;
-        }
+    for (let i = 0; i < this.length; i++) {
+      if (callback.call(thisArg, this[i], i, thisArg)) {
+        arrFilter.push(this[i]);
       }
     }
 
