@@ -76,11 +76,11 @@ class MyArray {
     return str;
   }
 
-  filter(callback, thisArg = this) {
+  filter(callback, thisArg) {
     const arrFilter = new MyArray();
 
     for (let i = 0; i < this.length; i++) {
-      if (callback.call(thisArg, this[i], i, thisArg)) {
+      if (callback.call(thisArg, this[i], i, this)) {
         arrFilter.push(this[i]);
       }
     }
