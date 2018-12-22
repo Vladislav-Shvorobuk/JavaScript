@@ -1,9 +1,13 @@
 class MyArray {
   constructor(...rest) {
-    for (let i = 0; i < rest.length; i++) {
-      this[i] = rest[i];
+    if (rest.length === 1 && typeof rest[0] === 'number') {
+      this.length = rest[0];
+    } else {
+      for (let i = 0; i < rest.length; i++) {
+        this[i] = rest[i];
+      }
+      this.length = arguments.length;
     }
-    this.length = arguments.length;
   }
 
   * iterator() {
