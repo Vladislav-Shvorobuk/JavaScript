@@ -113,16 +113,23 @@ class MyArray {
 
     return mapArr;
   }
-  reduce(callback, currentValue = 0) {
-    let result = currentValue;
-
-    if (arguments.length > 0 && typeof callback === 'function') {
-      for (let i = 0; i < this.length; i++) {
-        result = callback(result, this[i], i, this);
-      }
+  reduce(callback, initialValue) {
+    if (this.length === 0 && !initialValue) {
+      throw new TypeError('array is empty and initialValue not set!');
+    } else if (this.length === 1 && !initialValue) {
+      return this[0];
+    } else if (this.length === 0 && initialValue) {
+      return initialValue;
     }
 
-    return result;
+    let accumulator = initialValue || initialValue !== undefined ? initialValue : this[0];
+    let i = initialValue || initialValue !== undefined ? 0 : 1;
+
+    for (i; i < this.length; i++) {
+      accumulator = callback(accumulator, this[i], i, this);
+    }
+
+    return accumulator;
   }
 
   sort(callback) {
