@@ -97,7 +97,7 @@ class MyArray {
         callback.call(self, this[i], i, this);
       }
     } else {
-      throw new TypeError();
+      throw new TypeError('callback is not a function');
     }
   }
   map(callback) {
