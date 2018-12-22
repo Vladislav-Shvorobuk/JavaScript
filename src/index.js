@@ -127,7 +127,7 @@ class MyArray {
   }
 
   sort(callback) {
-    if (arguments.length === 1 && typeof callback === 'function') {
+    if (callback) {
       for (let i = 0; i < this.length - 1; i++) {
         for (let j = 0; j < this.length - 1; j++) {
           if (callback(this[j], this[j + 1]) > 0) {
@@ -147,6 +147,8 @@ class MyArray {
           }
         }
       }
+    } else {
+      throw new TypeError('callback is not a function');
     }
     return this;
   }
