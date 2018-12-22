@@ -35,25 +35,23 @@ class MyArray {
     return this.length;
   }
 
-  static from(...rest) {
+  static from(obj, callback, thisArg) {
     const arrFrom = new MyArray();
+    const self = thisArg ? thisArg : this;
 
-    if (rest[1] && typeof rest[1] === 'function') {
-      for (let i = 0; i < rest[0].length; i++) {
-        arrFrom[i] = rest[0][i];
+    if (obj && typeof callback === 'function' && thisArg) {
+      for (let i = 0; i < obj.length; i++) {
         arrFrom.length += 1;
-        arrFrom[i] = rest[1](arrFrom[i], i, arrFrom);
+        arrFrom[i] = callback.call(self, obj[i], i, obj);
       }
-    } else if (rest[0].size) {
-      let count = -1;
-
-      for (const couple of rest[0]) {
-        arrFrom[count += 1] = couple;
+    } else if (obj && typeof callback === 'function') {
+      for (let i = 0; i < obj.length; i++) {
         arrFrom.length += 1;
+        arrFrom[i] = callback(obj[i], i, obj);
       }
-    } else if (rest[0].length) {
-      for (let i = 0; i < rest[0].length; i++) {
-        arrFrom[i] = rest[0][i];
+    } else if (obj) {
+      for (let i = 0; i < obj.length; i++) {
+        arrFrom[i] = obj[i];
         arrFrom.length += 1;
       }
     }
