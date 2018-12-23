@@ -158,5 +158,14 @@ class MyArray {
     }
     return this;
   }
+
+  find(callback, thisArg) {
+    for (let i = 0; i < this.length; i++) {
+      if (callback.call(thisArg, this[i], i, this)) {
+        return this[i];
+      }
+    }
+    return undefined;
+  }
 }
 export default MyArray;
