@@ -167,5 +167,19 @@ class MyArray {
     }
     return undefined;
   }
+
+  slice(begin, end) {
+    const arr = new MyArray();
+    let start = begin && begin !== undefined ? begin : 0;
+    let finish = end && end !== undefined ? end : this.length;
+
+    start = begin < 0 ? this.length + begin : start;
+    finish = end < 0 ? this.length + end : finish;
+
+    for (let i = start; i < finish; i++) {
+      arr.push(this[i]);
+    }
+    return arr;
+  }
 }
 export default MyArray;
