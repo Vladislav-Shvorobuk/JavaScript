@@ -10,14 +10,10 @@ class MyArray {
     }
   }
 
-  * iterator() {
+  * [Symbol.iterator]() {
     for (let i = 0; i < this.length; i++) {
       yield this[i];
     }
-  }
-
-  [Symbol.iterator]() {
-    return this.iterator();
   }
 
   pop() {
@@ -182,4 +178,6 @@ class MyArray {
     return arr;
   }
 }
+
+
 export default MyArray;
