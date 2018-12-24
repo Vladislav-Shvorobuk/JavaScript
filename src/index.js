@@ -26,6 +26,7 @@ class MyArray {
     this.length = this.length - 1;
     return deleteEl;
   }
+
   push(...rest) {
     for (let i = 0; i < rest.length; i++) {
       this[this.length] = rest[i];
@@ -37,23 +38,14 @@ class MyArray {
 
   static from(obj, callback, thisArg) {
     const arrFrom = new MyArray();
-    const self = thisArg ? thisArg : this;
 
-    if (obj && typeof callback === 'function' && thisArg) {
-      for (let i = 0; i < obj.length; i++) {
-        arrFrom.length += 1;
-        arrFrom[i] = callback.call(self, obj[i], i, obj);
-      }
-    } else if (obj && typeof callback === 'function') {
-      for (let i = 0; i < obj.length; i++) {
-        arrFrom.length += 1;
-        arrFrom[i] = callback(obj[i], i, obj);
-      }
-    } else if (obj) {
-      for (let i = 0; i < obj.length; i++) {
+    for (let i = 0; i < obj.length; i++) {
+      if (obj && typeof callback === 'function') {
+        arrFrom[i] = callback.call(thisArg || this, obj[i], i, obj);
+      } else if (obj) {
         arrFrom[i] = obj[i];
-        arrFrom.length += 1;
       }
+      arrFrom.length += 1;
     }
 
     return arrFrom;
@@ -77,7 +69,8 @@ class MyArray {
 
     for (let i = 0; i < this.length; i++) {
       if (callback.call(thisArg, this[i], i, this)) {
-        arrFilter.push(this[i]);
+        arrFilter[arrFilter.length] = this[i];
+        arrFilter.length += 1;
       }
     }
 
@@ -87,28 +80,22 @@ class MyArray {
   forEach(callback, thisArg) {
     const self = thisArg ? thisArg : this;
 
-    if (typeof callback === 'function') {
-      for (let i = 0; i < this.length; i++) {
-        callback.call(self, this[i], i, this);
-      }
-    } else {
-      throw new TypeError('callback is not a function');
+    for (let i = 0; i < this.length; i++) {
+      callback.call(self, this[i], i, this);
     }
   }
+
   map(callback, thisArg) {
     const mapArr = new MyArray();
 
-    if (arguments.length > 0 && typeof callback === 'function') {
-      for (let i = 0; i < this.length; i++) {
-        mapArr[i] = callback.call(thisArg, this[i], i, this);
-        mapArr.length += 1;
-      }
-    } else {
-      throw new TypeError('callback is not a function');
+    for (let i = 0; i < this.length; i++) {
+      mapArr[i] = callback.call(thisArg, this[i], i, this);
+      mapArr.length += 1;
     }
 
     return mapArr;
   }
+
   reduce(callback, initialValue) {
     if (this.length === 0 && !initialValue) {
       throw new TypeError('array is empty and initialValue not set!');
@@ -129,28 +116,18 @@ class MyArray {
   }
 
   sort(callback) {
-    if (callback) {
-      for (let i = 0; i < this.length - 1; i++) {
-        for (let j = 0; j < this.length - 1; j++) {
-          if (callback(this[j], this[j + 1]) > 0) {
-            const max = this[j];
-            this[j] = this[j + 1];
-            this[j + 1] = max;
-          }
+    for (let i = 0; i < this.length - 1; i++) {
+      for (let j = 0; j < this.length - 1; j++) {
+        if (callback && callback(this[j], this[j + 1]) > 0) {
+          const max = this[j];
+          this[j] = this[j + 1];
+          this[j + 1] = max;
+        } else if (!callback && `${this[j]}` > `${this[j + 1]}`) {
+          const max = this[j];
+          this[j] = this[j + 1];
+          this[j + 1] = max;
         }
       }
-    } else if (arguments.length === 0) {
-      for (let i = 0; i < this.length - 1; i++) {
-        for (let j = 0; j < this.length - i; j++) {
-          if (`${this[j]}` > `${this[j + 1]}`) {
-            const max = this[j];
-            this[j] = this[j + 1];
-            this[j + 1] = max;
-          }
-        }
-      }
-    } else {
-      throw new TypeError('callback is not a function');
     }
     return this;
   }
@@ -166,8 +143,8 @@ class MyArray {
 
   slice(begin, end) {
     const arr = new MyArray();
-    let start = begin && begin !== undefined ? begin : 0;
-    let finish = end && end !== undefined ? end : this.length;
+    let start = begin ? begin : 0;
+    let finish = end ? end : this.length;
 
     start = begin < 0 ? this.length + begin : start;
     finish = end < 0 ? this.length + end : finish;
