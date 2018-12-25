@@ -78,10 +78,8 @@ class MyArray {
   }
 
   forEach(callback, thisArg) {
-    const self = thisArg ? thisArg : this;
-
     for (let i = 0; i < this.length; i++) {
-      callback.call(self, this[i], i, this);
+      callback.call(thisArg, this[i], i, this);
     }
   }
 
@@ -155,6 +153,5 @@ class MyArray {
     return arr;
   }
 }
-
 
 export default MyArray;
