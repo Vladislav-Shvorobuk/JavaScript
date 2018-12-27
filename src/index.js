@@ -41,7 +41,7 @@ class MyArray {
 
     for (let i = 0; i < obj.length; i++) {
       if (obj && typeof callback === 'function') {
-        arrFrom[i] = callback.call(thisArg || this, obj[i], i, obj);
+        arrFrom[i] = callback.call(thisArg, obj[i], i, obj);
       } else if (obj) {
         arrFrom[i] = obj[i];
       }
@@ -52,16 +52,13 @@ class MyArray {
   }
 
   toString() {
-    let str = '';
+    let string = this.length === 0 ? '' : this[0];
 
-    for (let i = 0; i < this.length; i++) {
-      if (i === this.length - 1) {
-        str += this[i];
-        break;
-      }
-      str += `${this[i]},`;
+    for (let i = 1; i < this.length; i++) {
+      string += `,${this[i]}`;
     }
-    return str;
+
+    return string;
   }
 
   filter(callback, thisArg) {
