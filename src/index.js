@@ -27,10 +27,10 @@ class MyArray {
     return deleteEl;
   }
 
-  push(...rest) {
-    for (let i = 0; i < rest.length; i++) {
-      this[this.length] = rest[i];
-      this.length = this.length + 1;
+  push(...args) {
+    for (let i = 0; i < args.length; i++) {
+      this[this.length] = args[i];
+      this.length += 1;
     }
 
     return this.length;
