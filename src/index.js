@@ -18,7 +18,7 @@ class MyArray {
 
   pop() {
     if (this.length === 0) {
-      return undefined;
+      return;
     }
 
     const deleteEl = this[this.length - 1];
@@ -135,14 +135,15 @@ class MyArray {
 
   slice(begin, end) {
     const arr = new MyArray();
-    let start = begin ? begin : 0;
-    let finish = end ? end : this.length;
+    let start = begin || 0;
+    let finish = end || this.length;
 
     start = begin < 0 ? this.length + begin : start;
     finish = end < 0 ? this.length + end : finish;
 
     for (let i = start; i < finish; i++) {
-      arr.push(this[i]);
+      arr[arr.length] = this[i];
+      arr.length += 1;
     }
     return arr;
   }
