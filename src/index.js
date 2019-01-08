@@ -40,9 +40,9 @@ class MyArray {
     const arrFrom = new MyArray();
 
     for (let i = 0; i < obj.length; i++) {
-      if (obj && typeof callback === 'function') {
+      if (typeof callback === 'function') {
         arrFrom[i] = callback.call(thisArg, obj[i], i, obj);
-      } else if (obj) {
+      } else {
         arrFrom[i] = obj[i];
       }
       arrFrom.length += 1;
