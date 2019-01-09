@@ -130,13 +130,11 @@ class MyArray {
     }
   }
 
-  slice(begin = 0, end = this.length) {
+  slice(begin, end) {
     const arr = new MyArray();
-    let start = begin || 0;
-    let finish = end || this.length;
 
-    start = begin < 0 ? this.length + begin : start;
-    finish = end < 0 ? this.length + end : finish;
+    const start = begin < 0 ? this.length + begin : begin || 0;
+    const finish = end < 0 ? this.length + end : end || this.length;
 
     for (let i = start; i < finish; i++) {
       arr[arr.length] = this[i];
