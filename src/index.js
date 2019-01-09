@@ -98,10 +98,9 @@ class MyArray {
       return initialValue;
     }
 
-    let accumulator = initialValue !== undefined ? initialValue : this[0];
-    let i = initialValue !== undefined ? 0 : 1;
+    let accumulator = initialValue !== undefined ? callback(initialValue, this[0], 0, this) : this[0];
 
-    for (i; i < this.length; i++) {
+    for (let i = 1; i < this.length; i++) {
       accumulator = callback(accumulator, this[i], i, this);
     }
 
@@ -109,11 +108,11 @@ class MyArray {
   }
 
   sort(callback) {
+    const cb = callback ? callback : (a, b) => `${a}` > `${b}`;
+
     for (let i = 0; i < this.length - 1; i++) {
       for (let j = 0; j < this.length - 1; j++) {
-        const check = callback ? callback(this[j], this[j + 1]) > 0 : `${this[j]}` > `${this[j + 1]}`;
-
-        if (check) {
+        if (cb(this[j], this[j + 1]) > 0) {
           const max = this[j];
           this[j] = this[j + 1];
           this[j + 1] = max;
@@ -133,11 +132,9 @@ class MyArray {
 
   slice(begin, end) {
     const arr = new MyArray();
-    let start = begin || 0;
-    let finish = end || this.length;
 
-    start = begin < 0 ? this.length + begin : start;
-    finish = end < 0 ? this.length + end : finish;
+    const start = begin < 0 ? this.length + begin : begin || 0;
+    const finish = end < 0 ? this.length + end : end || this.length;
 
     for (let i = start; i < finish; i++) {
       arr[arr.length] = this[i];
