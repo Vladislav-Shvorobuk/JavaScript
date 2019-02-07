@@ -1,10 +1,13 @@
-class MyArray {
-  constructor(...args) {
+class MyArray <T>{
+  length: number;
+  [key: number]: T;
+
+  constructor (...args: T[] | number[]) {
     if (args.length === 1 && typeof args[0] === 'number') {
-      this.length = args[0];
+      this.length = <number>args[0];
     } else {
-      for (let i = 0; i < args.length; i++) {
-        this[i] = args[i];
+      for (let i: number = 0; i < args.length; i++) {
+        this[i] = <T>args[i];
       }
       this.length = args.length;
     }
@@ -16,7 +19,7 @@ class MyArray {
     }
   }
 
-  pop() {
+  pop(): T | undefined {
     if (this.length === 0) {
       return;
     }
@@ -27,7 +30,7 @@ class MyArray {
     return deleteEl;
   }
 
-  push(...args) {
+  push(...args: T[]): number {
     for (let i = 0; i < args.length; i++) {
       this[this.length] = args[i];
       this.length += 1;
@@ -36,14 +39,14 @@ class MyArray {
     return this.length;
   }
 
-  static from(obj, callback, thisArg) {
-    const arrFrom = new MyArray();
+  static from<T>(arrayLike: any, mappFn: (element?: T, index?: number, array?: any) => MyArray<any>, thisArg?: any): MyArray<T> {
+    const arrFrom = new MyArray<T>();
 
-    for (let i = 0; i < obj.length; i++) {
-      if (typeof callback === 'function') {
-        arrFrom[i] = callback.call(thisArg, obj[i], i, obj);
+    for (let i = 0; i < arrayLike.length; i++) {
+      if (typeof mappFn === 'function') {
+        arrFrom[i] = mappFn.call(thisArg, arrayLike[i], i, arrayLike);
       } else {
-        arrFrom[i] = obj[i];
+        arrFrom[i] = arrayLike[i];
       }
       arrFrom.length += 1;
     }
@@ -51,8 +54,8 @@ class MyArray {
     return arrFrom;
   }
 
-  toString() {
-    let string = this.length === 0 ? '' : this[0];
+  toString(): string {
+    let string: string = this.length === 0 ? '' : `${this[0]}`;
 
     for (let i = 1; i < this.length; i++) {
       string += `,${this[i]}`;
@@ -61,8 +64,8 @@ class MyArray {
     return string;
   }
 
-  filter(callback, thisArg) {
-    const arrFilter = new MyArray();
+  filter(callback: (element: T, index: number, array: MyArray<T>) => T, thisArg?: any) {
+    const arrFilter = new MyArray<T>();
 
     for (let i = 0; i < this.length; i++) {
       if (callback.call(thisArg, this[i], i, this)) {
@@ -74,14 +77,14 @@ class MyArray {
     return arrFilter;
   }
 
-  forEach(callback, thisArg) {
+  forEach(callback: (element?: T, index?: number, array?: MyArray<T>) => void, thisArg?: any): void {
     for (let i = 0; i < this.length; i++) {
       callback.call(thisArg, this[i], i, this);
     }
   }
 
-  map(callback, thisArg) {
-    const mapArr = new MyArray();
+  map<U>(callback: (element: T, index: number, array: MyArray<T>) => any, thisArg?: any): MyArray<U> {
+    const mapArr = new MyArray<U>();
 
     for (let i = 0; i < this.length; i++) {
       mapArr[i] = callback.call(thisArg, this[i], i, this);
@@ -91,7 +94,7 @@ class MyArray {
     return mapArr;
   }
 
-  reduce(callback, initialValue) {
+  reduce(callback: (accumulator: T, currentValue: T, index: number, array: MyArray<T>) => T, initialValue?: T): T {
     if (this.length === 0 && !initialValue) {
       throw new TypeError('array is empty and initialValue not set!');
     } else if (this.length === 0 && initialValue) {
@@ -107,8 +110,8 @@ class MyArray {
     return accumulator;
   }
 
-  sort(callback) {
-    const cb = callback ? callback : (a, b) => `${a}` > `${b}`;
+  sort(callback?: (a: T, b: T) => number): this {
+    const cb = callback ? callback : (a: T, b: T) => `${a}` > `${b}`;
 
     for (let i = 0; i < this.length - 1; i++) {
       for (let j = 0; j < this.length - 1; j++) {
@@ -122,7 +125,7 @@ class MyArray {
     return this;
   }
 
-  find(callback, thisArg) {
+  find(callback: (element: T, index: number, array: MyArray<T>) => boolean, thisArg?: any): T | undefined {
     for (let i = 0; i < this.length; i++) {
       if (callback.call(thisArg, this[i], i, this)) {
         return this[i];
@@ -130,8 +133,8 @@ class MyArray {
     }
   }
 
-  slice(begin, end) {
-    const arr = new MyArray();
+  slice(begin?: number, end?: number): MyArray<T> {
+    const arr = new MyArray<T>();
 
     const start = begin < 0 ? this.length + begin : begin || 0;
     const finish = end < 0 ? this.length + end : end || this.length;
@@ -145,3 +148,4 @@ class MyArray {
 }
 
 export default MyArray;
+
