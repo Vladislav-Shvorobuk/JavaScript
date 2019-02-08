@@ -40,7 +40,7 @@ class MyArray <T>{
   }
 
   static from<T, U>(arrayLike: ArrayLike<T>, mappFn?: (element?: T, index?: number, array?: MyArray<T>) => U, thisArg?: any): MyArray<T> | MyArray<U> {
-    const arrFrom = new MyArray<T>();
+    const arrFrom: MyArray<T> | MyArray<U> = new MyArray();
 
     for (let i = 0; i < arrayLike.length; i++) {
       if (typeof mappFn === 'function') {
@@ -94,7 +94,7 @@ class MyArray <T>{
     return mapArr;
   }
 
-  reduce(callback: (accumulator?: T, currentValue?: T, index?: number, array?: MyArray<T>) => T, initialValue?: T): T {
+  reduce<U>(callback: (accumulator?: T|U, currentValue?: T, index?: number, array?: MyArray<T>) => T|U, initialValue?: T|U): T|U {
     if (this.length === 0 && !initialValue) {
       throw new TypeError('array is empty and initialValue not set!');
     } else if (this.length === 0 && initialValue) {
