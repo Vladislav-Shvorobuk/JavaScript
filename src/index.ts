@@ -13,7 +13,7 @@ class MyArray <T>{
     }
   }
 
-  * [Symbol.iterator]() {
+  * [Symbol.iterator](): object {
     for (let i = 0; i < this.length; i++) {
       yield this[i];
     }
@@ -39,7 +39,7 @@ class MyArray <T>{
     return this.length;
   }
 
-  static from<T>(arrayLike: any, mappFn: (element?: T, index?: number, array?: any) => MyArray<any>, thisArg?: any): MyArray<T> {
+  static from<T, U>(arrayLike: ArrayLike<T>, mappFn?: (element?: T, index?: number, array?: MyArray<T>) => U, thisArg?: any): MyArray<T> | MyArray<U> {
     const arrFrom = new MyArray<T>();
 
     for (let i = 0; i < arrayLike.length; i++) {
@@ -64,7 +64,7 @@ class MyArray <T>{
     return string;
   }
 
-  filter(callback: (element: T, index: number, array: MyArray<T>) => T, thisArg?: any) {
+  filter(callback: (element?: T, index?: number, array?: MyArray<T>) => boolean, thisArg?: any): MyArray<T> {
     const arrFilter = new MyArray<T>();
 
     for (let i = 0; i < this.length; i++) {
@@ -83,7 +83,7 @@ class MyArray <T>{
     }
   }
 
-  map<U>(callback: (element: T, index: number, array: MyArray<T>) => any, thisArg?: any): MyArray<U> {
+  map<U>(callback: (element?: T, index?: number, array?: MyArray<T>) => U, thisArg?: any): MyArray<U> {
     const mapArr = new MyArray<U>();
 
     for (let i = 0; i < this.length; i++) {
@@ -94,7 +94,7 @@ class MyArray <T>{
     return mapArr;
   }
 
-  reduce(callback: (accumulator: T, currentValue: T, index: number, array: MyArray<T>) => T, initialValue?: T): T {
+  reduce(callback: (accumulator?: T, currentValue?: T, index?: number, array?: MyArray<T>) => T, initialValue?: T): T {
     if (this.length === 0 && !initialValue) {
       throw new TypeError('array is empty and initialValue not set!');
     } else if (this.length === 0 && initialValue) {
@@ -110,7 +110,7 @@ class MyArray <T>{
     return accumulator;
   }
 
-  sort(callback?: (a: T, b: T) => number): this {
+  sort(callback?: (a?: T, b?: T) => number): this {
     const cb = callback ? callback : (a: T, b: T) => `${a}` > `${b}`;
 
     for (let i = 0; i < this.length - 1; i++) {
@@ -125,7 +125,7 @@ class MyArray <T>{
     return this;
   }
 
-  find(callback: (element: T, index: number, array: MyArray<T>) => boolean, thisArg?: any): T | undefined {
+  find(callback: (element?: T, index?: number, array?: MyArray<T>) => boolean, thisArg?: any): T | undefined {
     for (let i = 0; i < this.length; i++) {
       if (callback.call(thisArg, this[i], i, this)) {
         return this[i];
@@ -149,3 +149,9 @@ class MyArray <T>{
 
 export default MyArray;
 
+
+
+interface ArrayLike<T> {
+  length: number;
+  [n: number]: T;
+}
