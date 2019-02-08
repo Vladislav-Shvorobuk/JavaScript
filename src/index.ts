@@ -150,7 +150,6 @@ class MyArray <T>{
 export default MyArray;
 
 
-
 interface ArrayLike<T> {
   length: number;
   [n: number]: T;
